@@ -1,130 +1,249 @@
-import type { Config } from "@netlify/functions";
-import { createHmac, timingSafeEqual } from "node:crypto";
-import { count, desc, eq } from "drizzle-orm";
-import { db } from "../../db/index.js";
-import { referralClaims, referrals } from "../../db/schema.js";
+// netlify/functions/referral.ts
+import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
+import { and, eq, desc, count } from "drizzle-orm";
+import { createHmac, timingSafeEqual } from "crypto";
+import { db } from "../../db";
+import { referrals, referralClaims } from "../../db/schema";
 
-// VK ID — только цифры; всё остальное (гостевые сессии, мусор) не засчитывается
-const VK_ID = /^\d{1,12}$/;
+// ─────────────────────────────────────────────────────────────
+// Утилиты
+// ─────────────────────────────────────────────────────────────
 
-const json = (body: unknown, status = 200) =>
-  Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
-
-// Проверка подписи параметров запуска VK Mini App.
-// Если секрет приложения задан в переменных окружения, ID игрока берётся
-// только из подписанных параметров — подделать чужой ID нельзя.
-function verifiedVkId(launch: string | undefined): string | null | undefined {
-  const secret = process.env.VK_APP_SECRET;
-  if (!secret) return undefined; // проверка выключена
-  if (!launch) return null;
-  const params = new URLSearchParams(launch.replace(/^\?/, ""));
-  const sign = params.get("sign");
-  if (!sign) return null;
-  const signed = [...params.entries()]
-    .filter(([k]) => k.startsWith("vk_"))
-    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
-  const query = new URLSearchParams(signed).toString();
-  const expected = createHmac("sha256", secret)
-    .update(query)
-    .digest("base64")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
-  const a = Buffer.from(expected);
-  const b = Buffer.from(sign);
-  if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
-  return params.get("vk_user_id");
-}
-
-function resolveId(claimed: unknown, launch: unknown): string | null {
-  const id = String(claimed ?? "");
-  if (!VK_ID.test(id)) return null;
-  const verified = verifiedVkId(typeof launch === "string" ? launch : undefined);
-  if (verified === undefined) return id;
-  return verified === id ? id : null;
-}
-
-async function invitedCount(vkId: string) {
-  const [row] = await db.select({ n: count() }).from(referrals).where(eq(referrals.referrerId, vkId));
-  return Number(row?.n ?? 0);
-}
-
-async function status(vkId: string) {
-  const [invited, claimRow, recent] = await Promise.all([
-    invitedCount(vkId),
-    db.select({ claimed: referralClaims.claimed }).from(referralClaims).where(eq(referralClaims.vkId, vkId)),
-    db
-      .select({ id: referrals.inviteeId, at: referrals.createdAt })
-      .from(referrals)
-      .where(eq(referrals.referrerId, vkId))
-      .orderBy(desc(referrals.createdAt))
-      .limit(10),
-  ]);
+function json(body: unknown, statusCode = 200) {
   return {
-    invited,
-    claimed: claimRow[0]?.claimed ?? 0,
-    recent: recent.map((r) => ({ id: r.id, at: r.at.getTime() })),
+    statusCode,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
+    body: JSON.stringify(body),
   };
 }
 
-export default async (req: Request) => {
+/**
+ * Проверка подписи VK Mini App.
+ * Подпись формируется как base64url(HMAC_SHA256(sign_params, secret))
+ * Параметр sign удаляется из строки, остальные сортируются по алфавиту
+ * и склеиваются в виде key=value через &.
+ *
+ * Документация: https://dev.vk.com/mini-apps/development/launch-params
+ */
+function verifyLaunchParams(
+  search: string,
+  secret: string
+): Record<string, string> | null {
+  const params = new URLSearchParams(search);
+  const sign = params.get("sign");
+  if (!sign) return null;
+
+  const pairs: [string, string][] = [];
+  params.forEach((v, k) => {
+    if (k !== "sign") pairs.push([k, v]);
+  });
+  pairs.sort(([a], [b]) => a.localeCompare(b));
+
+  const base = pairs.map(([k, v]) => `${k}=${v}`).join("&");
+  const expected = createHmac("sha256", secret)
+    .update(base)
+    .digest("base64url");
+
   try {
-    if (req.method === "GET") {
-      const url = new URL(req.url);
-      const vkId = resolveId(url.searchParams.get("vkId"), url.searchParams.get("launch") ?? undefined);
-      if (!vkId) return json({ error: "bad_id" }, 400);
-      return json(await status(vkId));
+    const a = Buffer.from(sign);
+    const b = Buffer.from(expected);
+    if (a.length !== b.length) return null;
+    if (!timingSafeEqual(a, b)) return null;
+  } catch {
+    return null;
+  }
+
+  const out: Record<string, string> = {};
+  for (const [k, v] of pairs) out[k] = v;
+  return out;
+}
+
+/**
+ * Возвращает проверенный vk_user_id или null.
+ * Если передан launch (строка query/hash) и секрет приложения — проверяем подпись.
+ * Иначе используем vkId напрямую (только для dev).
+ */
+function resolveId(
+  vkId?: string | number | null,
+  launch?: string | null
+): string | null {
+  const secret = process.env.VK_APP_SECRET;
+
+  if (launch && secret) {
+    const params = verifyLaunchParams(launch, secret);
+    if (params && params.vk_user_id) {
+      return params.vk_user_id;
+    }
+    // если подпись есть, но битая — отказ
+    if (launch.includes("sign=")) return null;
+  }
+
+  // Dev-режим: без подписи
+  if (vkId != null && String(vkId).length > 0) {
+    return String(vkId);
+  }
+  return null;
+}
+
+async function invitedCount(vkId: string): Promise<number> {
+  const rows = await db
+    .select({ c: count() })
+    .from(referrals)
+    .where(eq(referrals.referrerId, Number(vkId)));
+  return Number(rows[0]?.c ?? 0);
+}
+
+// ─────────────────────────────────────────────────────────────
+// Handler
+// ─────────────────────────────────────────────────────────────
+
+export const handler: Handler = async (
+  event: HandlerEvent,
+  _context: HandlerContext
+) => {
+  if (event.httpMethod === "OPTIONS") {
+    return json({ ok: true });
+  }
+
+  // ── GET: статистика рефералов ─────────────────────────────
+  if (event.httpMethod === "GET") {
+    const qs = new URLSearchParams(event.queryStringParameters ?? {});
+    const verifiedId = resolveId(qs.get("vkId"), qs.get("launch"));
+
+    if (!verifiedId) return json({ error: "bad_id" }, 400);
+
+    const [invited, claimRow, recent] = await Promise.all([
+      invitedCount(verifiedId),
+      db
+        .select({ claimed: referralClaims.claimed })
+        .from(referralClaims)
+        .where(eq(referralClaims.vkId, Number(verifiedId))),
+      db
+        .select({
+          id: referrals.inviteeId,
+          createdAt: referrals.createdAt,
+        })
+        .from(referrals)
+        .where(eq(referrals.referrerId, Number(verifiedId)))
+        .orderBy(desc(referrals.createdAt))
+        .limit(20),
+    ]);
+
+    const claimed = claimRow[0]?.claimed ?? 0;
+
+    return json({
+      vkId: Number(verifiedId),
+      invited,
+      claimed,
+      available: Math.max(0, invited - claimed),
+      recent: recent.map((r) => ({
+        id: r.id,
+        at: r.createdAt?.toISOString?.() ?? null,
+      })),
+    });
+  }
+
+  // ── POST: register / claim ────────────────────────────────
+  if (event.httpMethod === "POST") {
+    let body: any = {};
+    try {
+      body = event.body ? JSON.parse(event.body) : {};
+    } catch {
+      return json({ error: "bad_json" }, 400);
     }
 
-    if (req.method !== "POST") return json({ error: "method" }, 405);
+    const action = body.action ?? "register";
+    const launch =
+      typeof body.launch === "string" ? body.launch : event.rawQuery ?? "";
+    const verifiedId = resolveId(body.vkId, launch);
+    if (!verifiedId) return json({ error: "bad_id" }, 400);
 
-    const body = await req.json().catch(() => ({}));
-    const vkId = resolveId(body.vkId, body.launch);
-    if (!vkId) return json({ error: "bad_id" }, 400);
+    // ── Регистрация реферала ──
+    if (action === "register") {
+      const ref = body.ref;
+      if (!ref) return json({ error: "no_ref" }, 400);
 
-    // Новичок пришёл по ссылке: засчитываем пригласившему один раз навсегда
-    if (body.action === "join") {
-      const ref = String(body.ref ?? "");
-      if (!VK_ID.test(ref) || ref === vkId) return json({ credited: false, reason: "bad_ref" });
-      const inserted = await db
-        .insert(referrals)
-        .values({ inviteeId: vkId, referrerId: ref })
-        .onConflictDoNothing()
-        .returning({ id: referrals.inviteeId });
-      return json({ credited: inserted.length > 0 });
+      const inviteeId = Number(verifiedId);
+      const referrerId = Number(ref);
+
+      if (!Number.isFinite(inviteeId) || !Number.isFinite(referrerId)) {
+        return json({ error: "bad_ids" }, 400);
+      }
+      if (inviteeId === referrerId) {
+        return json({ error: "self_referral" }, 400);
+      }
+
+      try {
+        await db.insert(referrals).values({ inviteeId, referrerId });
+        return json({ ok: true, registered: true });
+      } catch (e: any) {
+        // уникальный конфликт = уже был засчитан
+        if (
+          e?.code === "23505" ||
+          String(e?.message || "").includes("duplicate key")
+        ) {
+          return json({ ok: true, registered: false, reason: "already" });
+        }
+        console.error("register error", e);
+        return json({ error: "db_error" }, 500);
+      }
     }
 
-    // Обмен новых друзей на награды: сервер атомарно сдвигает счётчик
-    // и возвращает диапазон (from, to], за который клиент выдаёт призы
-    if (body.action === "claim") {
-      const result = await db.transaction(async (tx) => {
-        await tx.insert(referralClaims).values({ vkId, claimed: 0 }).onConflictDoNothing();
-        const [row] = await tx
+    // ── Получение награды ──
+    if (action === "claim") {
+      const vkNum = Number(verifiedId);
+
+      const [invited, claimRow] = await Promise.all([
+        invitedCount(verifiedId),
+        db
           .select({ claimed: referralClaims.claimed })
           .from(referralClaims)
-          .where(eq(referralClaims.vkId, vkId))
-          .for("update");
-        const [{ n }] = await tx.select({ n: count() }).from(referrals).where(eq(referrals.referrerId, vkId));
-        const from = row?.claimed ?? 0;
-        const to = Math.max(from, Number(n));
-        if (to > from) {
-          await tx
-            .update(referralClaims)
-            .set({ claimed: to, updatedAt: new Date() })
-            .where(eq(referralClaims.vkId, vkId));
-        }
-        return { from, to };
+          .where(eq(referralClaims.vkId, vkNum)),
+      ]);
+
+      const claimed = claimRow[0]?.claimed ?? 0;
+      const availableToClaim = invited - claimed;
+      if (availableToClaim <= 0) {
+        return json({ error: "no_rewards" }, 400);
+      }
+
+      // ── Награда ──
+      // Настройте под свою игру. Пример: 100 монет за друга.
+      const REWARD_PER_FRIEND = 100;
+      const rewardAmount = availableToClaim * REWARD_PER_FRIEND;
+
+      // TODO: вставьте здесь начисление rewardAmount игроку verifiedId
+      // через вашу игровую БД/API, например:
+      //
+      // await db.update(players)
+      //   .set({ coins: sql`${players.coins} + ${rewardAmount}` })
+      //   .where(eq(players.vkId, vkNum));
+      //
+      // Ниже — заглушка, просто сохраняем факт клейма.
+
+      await db
+        .insert(referralClaims)
+        .values({ vkId: vkNum, claimed: invited })
+        .onConflictDoUpdate({
+          target: referralClaims.vkId,
+          set: { claimed: invited, updatedAt: new Date() },
+        });
+
+      return json({
+        success: true,
+        claimed: invited,
+        rewarded: availableToClaim,
+        reward: rewardAmount,
       });
-      return json({ ...result, ...(await status(vkId)) });
     }
 
-    return json({ error: "action" }, 400);
-  } catch (e) {
-    console.error("referral error", e);
-    return json({ error: "server" }, 500);
+    return json({ error: "unknown_action" }, 400);
   }
-};
 
-export const config: Config = {
-  path: "/api/referral",
+  return json({ error: "method_not_allowed" }, 405);
 };
