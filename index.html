@@ -648,6 +648,46 @@ body.special-alert header{
 .wishState{font-size:.72rem;color:var(--green);white-space:nowrap}
 .wishState.wait{color:var(--dim)}
 .wishDel{padding:4px 10px!important;font-size:.72rem}
+/* ---------- Реферальный кабинет ---------- */
+#refMedal{display:none;color:var(--gold)}#refMedal.legend{animation:legGlow 1.6s infinite}
+.snavDot{display:none;width:7px;height:7px;border-radius:50%;background:var(--red);margin-left:5px;vertical-align:middle}.snavDot.show{display:inline-block}
+.refHero{position:relative;overflow:hidden;display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,#1f2a44,#2a1f44);border:1px solid #4a6ea8;border-radius:14px;padding:16px;margin-bottom:12px;animation:pop .3s}
+.refHeroGlow{position:absolute;inset:-50%;background:conic-gradient(from 0deg,transparent,rgba(74,158,255,.18),transparent 40%);animation:refSpin 6s linear infinite;pointer-events:none}
+@keyframes refSpin{to{transform:rotate(360deg)}}
+.refLvlBadge{position:relative;width:62px;height:62px;border-radius:50%;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle,#3a5a8c,#1b2a44);border:2px solid var(--gold);box-shadow:0 0 16px rgba(208,173,98,.5)}
+.refLvlBadge span{font-size:1.3rem}.refLvlBadge b{font-size:.8rem;color:var(--gold)}
+.refHeroInfo{position:relative}.refHeroTitle{font-weight:800}.refHeroSub{font-size:.78rem;color:var(--dim);margin-top:4px}
+.refStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.refStat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;display:flex;flex-direction:column}
+.refStat b{font-size:1.1rem}.refStat i{font-size:.65rem;color:var(--dim);font-style:normal}.refStat.gold b{color:var(--gold)}.refStat.green b{color:var(--green)}
+.refProgHead{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:.82rem;margin-bottom:8px}.refPer{color:var(--gold)}
+.refBar{position:relative;height:18px;background:#0e1418;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.refBarFill{height:100%;background:linear-gradient(90deg,#2d6cdf,#4a9eff,#9b5cff);background-size:200% 100%;animation:hueSlide 3s linear infinite;transition:width .8s cubic-bezier(.2,.9,.3,1.2)}
+.refBarPend{position:absolute;top:0;height:100%;background:repeating-linear-gradient(45deg,rgba(208,173,98,.5) 0 6px,rgba(208,173,98,.2) 6px 12px)}
+.refBarTicks i{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.2)}
+.refActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.refInviteBtn{background:linear-gradient(135deg,#0077ff,#4a9eff);box-shadow:0 0 14px rgba(0,119,255,.5);flex:1;min-width:180px}
+.refInviteBtn:hover{box-shadow:0 0 22px rgba(0,119,255,.8)}.refClaimBtn{animation:tutPulse 1.2s infinite}
+.refLevels{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.refLvl{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center;font-size:.75rem}
+.refLvl.done{border-color:var(--green)}.refLvl.cur{border-color:#4a9eff;box-shadow:0 0 12px rgba(74,158,255,.4)}.refLvl.lock{opacity:.55}
+.refLvlIcon{font-size:1.4rem}.refLvlName{font-weight:800}.refLvlReq{color:var(--dim)}.refLvlPay{color:var(--gold)}
+.refPrizes{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.refPrizeCard{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center;transition:transform .2s}
+.refPrizeCard:hover{transform:translateY(-2px)}.refPrizeCard.got{border-color:var(--gold);box-shadow:0 0 10px rgba(208,173,98,.35)}.refPrizeCard.lock{opacity:.7}.refPrizeCard.secret{filter:grayscale(.6)}
+.refPrizeAt{position:absolute;top:6px;right:8px;font-size:.65rem;color:var(--dim)}.refPrizeIcon{font-size:1.6rem}.refPrizeName{font-weight:800;font-size:.8rem;margin-top:6px}.refPrizeGot{color:var(--green);font-size:.7rem;margin-top:4px}
+.refPlate{display:inline-flex;align-items:stretch;border:2px solid #333;border-radius:5px;background:#f6f6f2;color:#111;font-weight:900;font-family:'Arial Narrow',Arial,sans-serif}
+.refPlateMain{padding:2px 6px;font-size:.95rem}.refPlateReg{border-left:2px solid #333;padding:0 4px;font-size:.7rem;display:flex;flex-direction:column;line-height:1.1;justify-content:center}.refPlateReg i{font-size:.45rem;font-style:normal}
+.refPlate.r2{box-shadow:var(--rc2-glow)}.refPlate.r3{box-shadow:var(--rc3-glow)}.refPlate.r4{box-shadow:var(--rc4-glow)}
+.refFriends{display:flex;flex-direction:column;gap:6px}.refFriend{display:flex;align-items:center;gap:8px;background:var(--panel2);border-radius:8px;padding:6px 10px;animation:rowIn .3s both}.refFriend a{color:var(--cyan)}
+.refCeleb,.refWelcome{text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+.refCelebBig{font-size:1.5rem;font-weight:900}.refCelebCoins{font-size:1.3rem;color:var(--gold);font-weight:800}.refLvlUp{color:#4a9eff;font-weight:800}
+.refPrize{display:flex;gap:10px;align-items:center;text-align:left;background:var(--panel);border-radius:10px;padding:8px;width:100%}
+.refWelcomeAva{font-size:3rem;animation:pop .5s}.refWelcomeId{color:#4a9eff}
+.refWelcomeGifts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.refGift{background:var(--panel);border:1px solid var(--gold);border-radius:10px;padding:8px 12px;display:flex;flex-direction:column}.refGift span{font-size:.65rem;color:var(--dim)}
+.plate.frame-vkplat,.invPlate.frame-vkplat{border-color:#c9d6e3;box-shadow:0 0 10px #4a9eff,inset 0 0 0 2px #fff}
+.musCard.frame-vkplat{box-shadow:inset 0 0 0 2px #c9d6e3,0 0 10px #4a9eff}
+@media (max-width:640px){.refStats{gap:5px}.refStat b{font-size:.95rem}.refHero{padding:12px}}
 </style>
 </head>
 <body>
@@ -656,6 +696,7 @@ body.special-alert header{
 <header>
   <div class="logo">🎰 НОМЕРО-КРУТИЛКА</div>
   <div class="hspace"></div>
+  <button class="cur" id="refMedal" title="Статус реферальной программы"></button>
   <div class="cur" id="buffTag">💵×2 <span id="buffVal"></span></div>
   <div class="cur" id="numBuffTag">🔢×2 <span id="numBuffVal"></span></div>
   <div class="cur" id="curCoins">💵 <span id="coinsVal">0</span></div>
@@ -741,6 +782,7 @@ body.special-alert header{
       <button class="snav active" data-sub="season">🏅 Сезон</button>
       <button class="snav" data-sub="daily">📅 Ежедневно</button>
       <button class="snav" data-sub="wheel">🎡 Колесо</button>
+      <button class="snav" data-sub="friends">👥 Друзья<i class="snavDot" id="refDot"></i></button>
     </div>
     <div class="spanel active" id="sub-season"><div id="seasonWrap"></div></div>
     <div class="spanel" id="sub-daily">
@@ -767,6 +809,8 @@ body.special-alert header{
         <div class="marketGrid" id="marketList"></div>
       </div>
     </div>
+    <!-- Реферальный кабинет: рендерится в renderRef() -->
+    <div class="spanel" id="sub-friends"><div id="refWrap"></div></div>
     <div class="spanel" id="sub-wheel">
       <div class="setBlock">
         <h3>🎡 Колесо фортуны</h3>
@@ -988,6 +1032,7 @@ const plateFrames = [
   {id:'gold',        name:'Чистое Золото',     desc:'Глянцевая золотая рамка',                      price:500,  currency:'gems', css:'gold'},
   {id:'neon',        name:'Светящаяся Неоновая',desc:'Анимированная RGB-рамка',                    price:1000, currency:'gems', css:'neon'},
   {id:'aurora',    name:'Аврора сезона',     desc:'Эксклюзив сезонного пропуска',                 price:0,    currency:'gems', css:'aurora', season:true},
+  {id:'vkplat',    name:'Платина VK',        desc:'Эксклюзив реферальной программы: 10 друзей',   price:0,    currency:'gems', css:'vkplat', ref:true},
 ];
 const MARKET_RESET_COST=100;
 const MARKET_CONTRACT_COUNT=3;
@@ -1036,6 +1081,15 @@ function freshState(){
     vol:1,                 // громкость звука 0..1 (ползунок в «Ещё»)
     tut:0,                 // шаг обучения (0 — не начато); 1..N активны, >N — завершено
     tutDone:0,             // 1 — обучение пройдено или пропущено
+    ref:{                  // реферальная программа (источник правды по друзьям — сервер)
+      invited:0,           // сколько друзей засчитано сервером (кэш для офлайна)
+      claimed:0,           // за скольких друзей награды уже выданы
+      earned:0,            // всего монет заработано на приглашениях
+      got:[],              // id выданных вех (номера, рамки, медали)
+      recent:[],           // последние приглашённые [{id,at}]
+      joined:'',           // ID пригласившего (новичок уже получил стартовый бонус)
+      medal:'',            // статус в профиле
+    },
     lastSeen:Date.now(),
   };
 }
@@ -1695,7 +1749,8 @@ function coreMult(){ // базовые множители цены БЕЗ рек
   return Math.pow(2,S.upg.mult||0)
        * (1+0.25*(S.cUpg.cincome||0))
        * (1+0.12*(S.pUpg.pincome||0))
-       * (1+0.10*S.pp);
+       * (1+0.10*S.pp)
+       * refIncomeMult(); // бонус реферальной программы: +1% за друга
 }
 // Эффективный множитель цены продажи: базовый + активный бонус «доход ×2»
 function saleMult(){ return coreMult()*incomeBuff(); }
@@ -2027,7 +2082,7 @@ function renderDaily(){
 // Бейдж «!» на кнопке «События»: есть что забрать (награда, задание, сезон или бесплатный спин колеса)
 function updDailyBadge(){
   const wheelReady=!wheelSpinning&&(Date.now()-(S.wheel.lastFree||0))>=WHEEL_COOLDOWN;
-  const ready=canClaimDaily()||(S.daily.tasks||[]).some(t=>t.done&&!t.claimed)||seasonHasClaimable()||wheelReady;
+  const ready=canClaimDaily()||(S.daily.tasks||[]).some(t=>t.done&&!t.claimed)||seasonHasClaimable()||wheelReady||refHasClaimable();
   $('#eventsBadge').classList.toggle('show',ready);
 }
 
@@ -3351,6 +3406,7 @@ function buyFrame(frameId){
   sanitizeOwnedFrames();
   const fd=frameDef(frameId);
   if(fd.season){ sndErr(); toast('Рамка «'+fd.name+'» — эксклюзив сезонного пропуска','#ff4d6a'); return; }
+  if(fd.ref){ sndErr(); toast('Рамка «'+fd.name+'» — награда за приглашение друзей','#ff4d6a'); return; }
   const f=frameDef(frameId);
   if(S.ownedFrames.includes(f.id)) return;
   if(S.gems<f.price){
@@ -3393,6 +3449,7 @@ function renderFrameShop(){
     const equipped=S.currentEquippedFrame===f.id;
     btn.className='btn '+(equipped?'b-gray':owned?'b-gold':'b-cyan')+' frameBuy';
     if(f.season&&!owned){ btn.textContent='🏅 Сезон'; btn.disabled=true; }
+    else if(f.ref&&!owned){ btn.textContent='👥 Друзья'; btn.disabled=true; }
     else{ btn.textContent=equipped?'✓ Надета':owned?'Надеть':f.price+' 💎'; btn.disabled=equipped; }
     btn.onclick=()=>owned?equipFrame(f.id):buyFrame(f.id);
     card.appendChild(btn);
@@ -3971,7 +4028,8 @@ const NAV_RENDER={ /* вызывается после показа раздел�
           else if(typeof renderGarage==='function') renderGarage(); },
   events(){ if(subActive('events','season')) renderSeason();
             else if(subActive('events','daily')) renderDaily();
-            else if(subActive('events','wheel')) renderWheel(); },
+            else if(subActive('events','wheel')) renderWheel();
+            else if(subActive('events','friends')) refOpen(); },
   more(){ if(subActive('more','stats')) renderStats();
           else if(subActive('more','ach')) renderAch();
           else refreshUpgrades(); },
@@ -4116,6 +4174,9 @@ function applySave(d){
   S.garage.slots=Math.min(20,Math.max(5,Math.round(S.garage.slots)));
   S.season=d.season&&typeof d.season==='object'?Object.assign(freshState().season,d.season):freshState().season;
   S.set=d.set&&typeof d.set==='object'?Object.assign(freshState().set,d.set):freshState().set;
+  S.ref=d.ref&&typeof d.ref==='object'?Object.assign(freshState().ref,d.ref):freshState().ref;
+  if(!Array.isArray(S.ref.got)) S.ref.got=[];
+  if(!Array.isArray(S.ref.recent)) S.ref.recent=[];
   // отметка об экране условий рекламы: только true/false, старое поле adConsent игнорируем
   S.adNotice=d.adNotice===true;
   // громкость: старые сейвы без поля vol переводим из вкл/выкл в 100%/0%
@@ -4493,6 +4554,345 @@ function applyPortraitLock(){
   }catch(e){}
 }
 
+/* ============================================================
+   👥 РЕФЕРАЛЬНАЯ ПРОГРАММА (VK Bridge)
+   Сервер (/api/referral) — источник правды: кто кого пригласил и
+   за скольких друзей награды уже выданы. Клиент только показывает
+   прогресс и выдаёт призы за диапазон, который вернул сервер.
+   ============================================================ */
+const VK_APP_LINK='https://vk.com/app54844673';
+const REF_API='/api/referral';
+// Стартовый пакет новичка: хватает на слияние и первые улучшения, но не ломает баланс
+const REF_WELCOME={coins:25000, gems:30, buffMin:15};
+let userVkId=null;      // VK ID текущего игрока (null — вне ВКонтакте)
+let userVkName='';
+window.userVkId=null;
+let refSyncing=false, refLastSync=0;
+
+// Уровни: порог — сколько всего друзей нужно, perFriend — награда за каждого на уровне
+const REF_LEVELS=[
+  {lvl:1, name:'Новичок', icon:'🌱', from:0,  to:3,  perFriend:50000},
+  {lvl:2, name:'Агент',   icon:'🕶️', from:3,  to:8,  perFriend:100000},
+  {lvl:3, name:'Посол',   icon:'🎖️', from:8,  to:15, perFriend:150000},
+  {lvl:4, name:'Легенда', icon:'👑', from:15, to:25, perFriend:250000},
+];
+// Вехи: plate — уникальный номер в сейф, frame — эксклюзивная рамка,
+// medal — статус в шапке, buffMin — доход ×2, secret — скрыта до получения
+const REF_MILESTONES=[
+  {id:'r1',  at:1,  icon:'🤝', name:'Первый контакт',   gems:50, desc:'+50 💎'},
+  {id:'r3',  at:3,  icon:'🚘', name:'Эпический автономер', plate:{n:'Х 777 ХХ 777',r:2}, desc:'Номер «Х777ХХ» + переход на Уровень 2'},
+  {id:'r5',  at:5,  icon:'📣', name:'Сарафанное радио', buffMin:30, gems:100, desc:'Доход ×2 на 30 минут + 100 💎'},
+  {id:'r8',  at:8,  icon:'🎖️', name:'Почётный посол',   plate:{n:'А 777 АА 777',r:3}, medal:'ambassador', desc:'Легендарный «А777АА» + медаль в профиле'},
+  {id:'r10', at:10, icon:'💎', name:'Платиновый круг',  plate:{n:'М 001 ММ 777',r:4}, frame:'vkplat', secret:true, desc:'Мифический «М001ММ» + рамка «Платина VK»'},
+  {id:'r15', at:15, icon:'👑', name:'Легенда VK',       plate:{n:'Е 777 КХ 777',r:4}, medal:'legend', gems:300, secret:true, desc:'Блатной «Е777КХ» + статус «Легенда VK» + 300 💎'},
+  {id:'r25', at:25, icon:'🌌', name:'Основатель клана', plate:{n:'О 001 ОО 777',r:4}, gems:1000, secret:true, desc:'Номер «О001ОО» + 1000 💎'},
+];
+const REF_MEDALS={
+  ambassador:{icon:'🎖️', name:'Почётный посол'},
+  legend:    {icon:'👑', name:'Легенда VK'},
+};
+
+function refLevelFor(n){
+  for(const L of REF_LEVELS) if(n<L.to) return L;
+  return REF_LEVELS[REF_LEVELS.length-1];
+}
+function refPerFriend(i){ // i — порядковый номер друга (1..)
+  for(const L of REF_LEVELS) if(i<=L.to) return L.perFriend;
+  return REF_LEVELS[REF_LEVELS.length-1].perFriend;
+}
+// Постоянный бонус к доходу: +1% за каждого друга, максимум +25%
+function refIncomeMult(){ return 1+0.01*Math.min(25,(S.ref&&S.ref.claimed)||0); }
+function refHasClaimable(){ return !!S.ref&&S.ref.invited>S.ref.claimed; }
+function refLaunchParams(){ return location.search.replace(/^\?/,''); }
+
+function vkSend(method,params,timeout=4000){
+  if(typeof vkBridge==='undefined') return Promise.reject(new Error('no bridge'));
+  return Promise.race([
+    vkBridge.send(method,params),
+    new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),timeout)),
+  ]);
+}
+async function refApi(method,body){
+  const opt={method,headers:{'Content-Type':'application/json'}};
+  let url=REF_API;
+  if(method==='GET') url+='?vkId='+encodeURIComponent(userVkId)+'&launch='+encodeURIComponent(refLaunchParams());
+  else opt.body=JSON.stringify(Object.assign({vkId:userVkId,launch:refLaunchParams()},body));
+  const r=await fetch(url,opt);
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+// ID пригласившего из ссылки вида https://vk.com/app54844673#ref=123
+function refFromHash(){
+  const m=/(?:^|[#&?])ref=(\d{1,12})/.exec(location.hash||'');
+  return m?m[1]:'';
+}
+
+/* ---------- Выдача наград ---------- */
+function refGrantPlate(pl){
+  const [a,b]=RARITIES[pl.r].range;
+  const item={n:pl.n,r:pl.r,p:Math.round(b*3*coreMult()),crit:false,ref:1};
+  if(S.safe.length<S.safeSlots) S.safe.push(item); else S.inventory.unshift(item);
+  museumPush(pl.n);
+}
+// itemsOnly — восстановление предметов после сброса сохранения (без монет и кристаллов)
+function refGrantMilestone(m,itemsOnly){
+  if(S.ref.got.includes(m.id)) return false;
+  S.ref.got.push(m.id);
+  if(m.plate) refGrantPlate(m.plate);
+  if(m.frame) awardFrame(m.frame);
+  if(m.medal) S.ref.medal=m.medal;
+  if(!itemsOnly){
+    if(m.gems) S.gems+=m.gems;
+    if(m.buffMin) S.buffUntil=Math.max(S.buffUntil,Date.now())+m.buffMin*60000;
+  }
+  return true;
+}
+async function refClaim(btn){
+  if(!userVkId||refSyncing) return;
+  refSyncing=true; if(btn) btn.disabled=true;
+  const prevLvl=refLevelFor(S.ref.claimed).lvl;
+  try{
+    const d=await refApi('POST',{action:'claim'});
+    refApplyStatus({invited:d.invited,recent:d.recent});
+    // предметы за вехи до from — восстановление после полного сброса
+    for(const m of REF_MILESTONES) if(m.at<=d.from) refGrantMilestone(m,true);
+    let coins=0; const unlocked=[];
+    for(let i=d.from+1;i<=d.to;i++){
+      coins+=refPerFriend(i);
+      for(const m of REF_MILESTONES) if(m.at===i&&refGrantMilestone(m,false)) unlocked.push(m);
+    }
+    S.ref.claimed=Math.max(S.ref.claimed,d.to);
+    if(coins>0){
+      S.coins+=coins;S.totalEarned+=coins;S.runEarned+=coins;S.ref.earned+=coins;
+      coinFly(btn||$('#refWrap'),coins);
+    }
+    if(d.to>d.from){
+      sndAch(); flash(.35);
+      const newLvl=refLevelFor(S.ref.claimed);
+      refCelebrate(d.to-d.from,coins,unlocked,newLvl.lvl>prevLvl?newLvl:null);
+    }else toast('👥 Новых друзей пока нет — отправьте приглашение!','#9aa0b5');
+    updHUD();renderInv();renderGarage();save();
+  }catch(e){
+    sndErr();toast('⚠️ Не удалось связаться с сервером, попробуйте позже','#ff4d6a');
+  }finally{
+    refSyncing=false; updDailyBadge(); renderRef();
+  }
+}
+function refCelebrate(friends,coins,unlocked,newLvl){
+  let html='<div class="refCeleb">'+
+    '<div class="refCelebBig">+'+friends+' '+plural(friends,'друг','друга','друзей')+'</div>'+
+    '<div class="refCelebCoins">💵 +'+fmt(coins)+'</div>';
+  if(newLvl) html+='<div class="refLvlUp">⬆️ Новый уровень: '+newLvl.icon+' '+esc(newLvl.name)+'</div>';
+  unlocked.forEach(m=>{
+    html+='<div class="refPrize">'+(m.plate?refPlateHtml(m.plate):'<span class="refPrizeIcon">'+m.icon+'</span>')+
+      '<div><b>'+esc(m.name)+'</b><div class="note" style="margin-top:2px">'+esc(m.desc)+'</div></div></div>';
+  });
+  html+='</div>';
+  showModal('🎉 Награды за друзей',html,[{label:'🔥 Супер!',cls:'b-gold'}]);
+}
+
+/* ---------- Синхронизация ---------- */
+function refApplyStatus(d){
+  if(typeof d.invited==='number') S.ref.invited=d.invited;
+  if(Array.isArray(d.recent)) S.ref.recent=d.recent.slice(0,10);
+  // сервер помнит выданные награды даже после сброса сохранения
+  if(typeof d.claimed==='number'&&d.claimed>S.ref.claimed){
+    for(const m of REF_MILESTONES) if(m.at<=d.claimed) refGrantMilestone(m,true);
+    S.ref.claimed=d.claimed;
+  }
+}
+async function refSync(force){
+  if(!userVkId) return;
+  if(!force&&Date.now()-refLastSync<30000) return;
+  refLastSync=Date.now();
+  try{
+    const before=S.ref.invited;
+    refApplyStatus(await refApi('GET'));
+    if(S.ref.invited>before&&refHasClaimable()) toast('👥 Друг принял приглашение! Заберите награду во вкладке «Друзья»','#39ff88','refNew');
+    updDailyBadge(); saveLocal();
+    if(subActive('events','friends')) renderRef();
+  }catch(e){}
+}
+function refOpen(){ renderRef(); refSync(); }
+
+/* ---------- Приглашение ---------- */
+function refInviteLink(){ return VK_APP_LINK+'#ref='+userVkId; }
+async function refInvite(btn){
+  if(!userVkId){
+    sndErr();toast('🔗 Приглашения работают внутри ВКонтакте — откройте игру в VK','#ff4d6a');return;
+  }
+  burst(btn,'#4a9eff',16);
+  try{
+    await vkBridge.send('VKWebAppShare',{link:refInviteLink()});
+    toast('📨 Приглашение отправлено! Награда придёт, когда друг зайдёт в игру','#00d4ff');
+    analyticsEvent('ref_share',{});
+  }catch(e){
+    refCopy();
+  }
+}
+function refCopy(){
+  if(!userVkId) return;
+  const link=refInviteLink();
+  const done=()=>toast('📋 Ссылка скопирована','#39ff88');
+  vkSend('VKWebAppCopyText',{text:link}).then(done).catch(()=>{
+    try{ navigator.clipboard.writeText(link).then(done,()=>toast(link,'#00d4ff')); }catch(e){ toast(link,'#00d4ff'); }
+  });
+}
+
+/* ---------- Вход по ссылке ---------- */
+async function refHandleJoin(had){
+  const ref=refFromHash();
+  if(!ref||S.ref.joined) return;
+  if(userVkId&&ref===String(userVkId)) return; // своя ссылка
+  // засчитываем только новичков: существующий игрок не может «стать приглашённым»
+  if(had&&S.playTime>900){ S.ref.joined=ref; saveLocal(); return; }
+  let credited=true;
+  if(userVkId){
+    try{ credited=(await refApi('POST',{action:'join',ref})).credited; }
+    catch(e){ return; } // сервер недоступен — попробуем при следующем запуске
+  }
+  S.ref.joined=ref;
+  if(!credited){ saveLocal(); return; }
+  const w=REF_WELCOME;
+  S.coins+=w.coins;S.totalEarned+=w.coins;S.runEarned+=w.coins;
+  S.gems+=w.gems;
+  S.buffUntil=Math.max(S.buffUntil,Date.now())+w.buffMin*60000;
+  updHUD();save();
+  sndWish();flash(.4);
+  showModal('👋 Добро пожаловать!',
+    '<div class="refWelcome">'+
+      '<div class="refWelcomeAva">🎁</div>'+
+      '<div>Вас пригласил игрок <b class="mono refWelcomeId">id'+esc(ref)+'</b></div>'+
+      '<div class="note">В честь знакомства — стартовый пакет:</div>'+
+      '<div class="refWelcomeGifts">'+
+        '<div class="refGift"><b>💵 '+fmt(w.coins)+'</b><span>монет</span></div>'+
+        '<div class="refGift"><b>💎 '+w.gems+'</b><span>кристаллов</span></div>'+
+        '<div class="refGift"><b>×2</b><span>доход '+w.buffMin+' мин</span></div>'+
+      '</div>'+
+      '<div class="note">Пригласите своих друзей во вкладке <b>События → 👥 Друзья</b> и соберите легендарные номера!</div>'+
+    '</div>',
+    [{label:'🎰 Погнали!',cls:'b-gold'}]);
+  analyticsEvent('ref_join',{});
+}
+
+/* ---------- Рендер кабинета ---------- */
+function refPlateHtml(pl){
+  const p=splitNumber(pl.n);
+  return '<span class="refPlate r'+pl.r+'"><span class="refPlateMain">'+esc(p.letter+' '+p.digits+' '+p.letters2)+'</span>'+
+    '<span class="refPlateReg">'+esc(p.region)+'<i>RUS</i></span></span>';
+}
+function updRefMedal(){
+  const el=$('#refMedal'); if(!el) return;
+  const md=REF_MEDALS[S.ref.medal];
+  el.style.display=md?'flex':'none';
+  if(md){ el.textContent=md.icon+' '+md.name; el.classList.toggle('legend',S.ref.medal==='legend'); }
+  $('#refDot')&&$('#refDot').classList.toggle('show',refHasClaimable());
+}
+function renderRef(){
+  updRefMedal();
+  const wrap=$('#refWrap'); if(!wrap) return;
+  const n=S.ref.claimed, pending=Math.max(0,S.ref.invited-n);
+  const L=refLevelFor(n), maxed=n>=L.to;
+  const inLvl=Math.min(L.to-L.from,n-L.from), need=L.to-L.from;
+  const pct=Math.min(100,Math.round(inLvl/need*100));
+  const pendPct=Math.min(100-pct,Math.round(pending/need*100));
+  const next=REF_MILESTONES.find(m=>m.at>n);
+  const md=REF_MEDALS[S.ref.medal];
+  const nextLvlName=REF_LEVELS[L.lvl]?('Уровня '+REF_LEVELS[L.lvl].lvl):'финала';
+
+  let h='';
+  // Шапка: уровень, баланс, бонус к доходу
+  h+='<div class="refHero">'+
+    '<div class="refHeroGlow"></div>'+
+    '<div class="refLvlBadge"><span>'+L.icon+'</span><b>'+L.lvl+'</b></div>'+
+    '<div class="refHeroInfo">'+
+      '<div class="refHeroTitle">Реферальный уровень '+L.lvl+' · '+esc(L.name)+'</div>'+
+      '<div class="refHeroSub">'+(userVkName?'Привет, '+esc(userVkName)+'! ':'')+(md?md.icon+' '+esc(md.name):'Приглашайте друзей — получайте монеты и уникальные номера')+'</div>'+
+    '</div>'+
+  '</div>';
+  h+='<div class="refStats">'+
+    '<div class="refStat"><span>👥</span><b>'+n+'</b><i>друзей</i></div>'+
+    '<div class="refStat gold"><span>💵</span><b>'+fmt(S.ref.earned)+'</b><i>заработано</i></div>'+
+    '<div class="refStat green"><span>📈</span><b>+'+Math.round((refIncomeMult()-1)*100)+'%</b><i>к доходу</i></div>'+
+  '</div>';
+
+  // Прогресс-бар уровня
+  h+='<div class="setBlock refProgBlock">'+
+    '<div class="refProgHead"><span>Приглашено: <b>'+Math.max(0,inLvl)+' / '+need+'</b> друзей до '+nextLvlName+'</span>'+
+    '<span class="refPer">💵 '+fmt(refPerFriend(n+1))+' за друга</span></div>'+
+    '<div class="refBar"><div class="refBarFill" style="width:'+pct+'%"></div>'+
+      (pendPct>0?'<div class="refBarPend" style="left:'+pct+'%;width:'+pendPct+'%"></div>':'')+
+      '<div class="refBarTicks">'+Array.from({length:need-1},(_,i)=>'<i style="left:'+((i+1)/need*100)+'%"></i>').join('')+'</div>'+
+    '</div>'+
+    (maxed?'<div class="note">🏁 Все уровни пройдены — каждый новый друг приносит '+fmt(refPerFriend(n+1))+' 💵</div>':
+      next?'<div class="note">Следующая награда: <b>'+(next.secret?'❓ секретный приз':next.icon+' '+esc(next.name))+'</b> за '+next.at+'-го друга</div>':'')+
+    '<div class="refActions">'+
+      '<button class="btn refInviteBtn" id="refInviteBtn">📨 Пригласить друга</button>'+
+      (userVkId?'<button class="btn b-gray" id="refCopyBtn">📋 Ссылка</button>':'')+
+      (pending>0?'<button class="btn b-gold refClaimBtn" id="refClaimBtn">🎁 Забрать за '+pending+' '+plural(pending,'друга','друзей','друзей')+'</button>':'')+
+    '</div>'+
+    (userVkId?'':'<div class="note">⚠️ Откройте игру во ВКонтакте, чтобы получить личную ссылку-приглашение.</div>')+
+  '</div>';
+
+  // Дорожка уровней
+  h+='<div class="setBlock"><h3>🪜 Уровни программы</h3><div class="refLevels">';
+  REF_LEVELS.forEach(R=>{
+    const st=n>=R.to?'done':R===L?'cur':'lock';
+    h+='<div class="refLvl '+st+'"><div class="refLvlIcon">'+R.icon+'</div>'+
+      '<div class="refLvlName">'+R.lvl+'. '+esc(R.name)+'</div>'+
+      '<div class="refLvlReq">'+R.from+'→'+R.to+' друзей</div>'+
+      '<div class="refLvlPay">'+fmt(R.perFriend)+' 💵</div></div>';
+  });
+  h+='</div></div>';
+
+  // Награды и номера
+  h+='<div class="setBlock"><h3>🏆 Уникальные награды</h3><div class="refPrizes">';
+  REF_MILESTONES.forEach(m=>{
+    const got=S.ref.got.includes(m.id);
+    const hidden=m.secret&&!got;
+    h+='<div class="refPrizeCard '+(got?'got':'lock')+(hidden?' secret':'')+'">'+
+      '<div class="refPrizeAt">'+m.at+' 👥</div>'+
+      (hidden?'<div class="refPrizeIcon">❓</div><div class="refPrizeName">Секретная награда</div><div class="note">Откроется за '+m.at+' друзей</div>':
+        (m.plate?refPlateHtml(m.plate):'<div class="refPrizeIcon">'+m.icon+'</div>')+
+        '<div class="refPrizeName">'+esc(m.name)+'</div><div class="note">'+esc(m.desc)+'</div>')+
+      (got?'<div class="refPrizeGot">✓ Получено</div>':'')+
+    '</div>';
+  });
+  h+='</div></div>';
+
+  // Последние друзья
+  h+='<div class="setBlock"><h3>📜 Последние приглашённые</h3>';
+  if(S.ref.recent.length){
+    h+='<div class="refFriends">'+S.ref.recent.map((f,i)=>
+      '<div class="refFriend" style="animation-delay:'+(i*40)+'ms"><span class="refFriendAva">👤</span>'+
+      '<a class="mono" href="https://vk.com/id'+esc(f.id)+'" target="_blank" rel="noopener">id'+esc(f.id)+'</a>'+
+      '<span class="note" style="margin:0 0 0 auto">'+new Date(f.at).toLocaleDateString('ru-RU')+'</span></div>').join('')+'</div>';
+  }else h+='<div class="note">Пока никого. Первый друг принесёт '+fmt(refPerFriend(1))+' 💵 и +50 💎!</div>';
+  h+='<div class="note">Друг засчитывается, когда впервые запускает игру по вашей ссылке. Новичок получает стартовый пакет: '+
+    fmt(REF_WELCOME.coins)+' 💵, '+REF_WELCOME.gems+' 💎 и доход ×2 на '+REF_WELCOME.buffMin+' минут. '+
+    'Каждый друг навсегда даёт +1% к доходу (до +25%).</div></div>';
+
+  wrap.innerHTML=h;
+  $('#refInviteBtn').onclick=e=>refInvite(e.currentTarget);
+  if($('#refCopyBtn')) $('#refCopyBtn').onclick=refCopy;
+  if($('#refClaimBtn')) $('#refClaimBtn').onclick=e=>refClaim(e.currentTarget);
+}
+
+/* ---------- Старт ---------- */
+async function refInit(had){
+  updRefMedal();
+  $('#refMedal').onclick=()=>switchSub('events','friends');
+  try{
+    const u=await vkSend('VKWebAppGetUserInfo');
+    if(u&&u.id){ userVkId=String(u.id); userVkName=u.first_name||''; window.userVkId=userVkId; }
+  }catch(e){ console.warn('VKWebAppGetUserInfo недоступен — игра запущена вне ВКонтакте'); }
+  await refHandleJoin(had);
+  await refSync(true);
+  if(subActive('events','friends')) renderRef();
+  // друзья могут прийти, пока игрок в игре — проверяем раз в минуту
+  setInterval(()=>{ if(!document.hidden) refSync(); },60000);
+}
+
 async function init(){
   // 1) инициализируем только нативный рекламный мост, если он есть
   await initSDK();
@@ -4571,6 +4971,7 @@ async function init(){
 
   updHUD();
   restartAuto();
+  refInit(had); // реферальная программа: VK ID, вход по ссылке, синхронизация
 
   // сообщаем платформе, что игра готова
   sdkReady();

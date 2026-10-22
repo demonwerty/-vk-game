@@ -1,0 +1,142 @@
+{
+  "version": "8",
+  "dialect": "postgres",
+  "id": "fccd7b5e-6142-44da-8354-2a720132cdc2",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "ddl": [
+    {
+      "isRlsEnabled": false,
+      "name": "referral_claims",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "referrals",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "vk_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "referral_claims"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "claimed",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "referral_claims"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "referral_claims"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "invitee_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "referrals"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "referrer_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "referrals"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "referrals"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "referrer_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "referrals_referrer_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "referrals"
+    },
+    {
+      "columns": [
+        "vk_id"
+      ],
+      "nameExplicit": false,
+      "name": "referral_claims_pkey",
+      "schema": "public",
+      "table": "referral_claims",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "invitee_id"
+      ],
+      "nameExplicit": false,
+      "name": "referrals_pkey",
+      "schema": "public",
+      "table": "referrals",
+      "entityType": "pks"
+    }
+  ],
+  "renames": []
+}
