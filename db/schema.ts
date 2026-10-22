@@ -1,19 +1,38 @@
-import { pgTable, text, timestamp, integer, index } from "drizzle-orm/pg-core";
+// db/schema.ts
+import {
+  pgTable,
+  bigint,
+  timestamp,
+  integer,
+  primaryKey,
+  index,
+} from "drizzle-orm/pg-core";
 
-// Каждый приглашённый игрок засчитывается ровно один раз (первичный ключ — его VK ID)
+/**
+ * Таблица referrals — кто кого пригласил.
+ * inviteeId — PK, чтобы один игрок не мог быть засчитан дважды.
+ */
 export const referrals = pgTable(
   "referrals",
   {
-    inviteeId: text("invitee_id").primaryKey(),
-    referrerId: text("referrer_id").notNull(),
+    inviteeId: bigint("invitee_id", { mode: "number" }).primaryKey(),
+    referrerId: bigint("referrer_id", { mode: "number" }).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
-  (t) => [index("referrals_referrer_idx").on(t.referrerId)],
+  (t) => ({
+    referrerIdx: index("referrals_referrer_idx").on(t.referrerId),
+  })
 );
 
-// Сколько друзей пригласивший уже обменял на награды (защита от повторного получения)
+/**
+ * Таблица referralClaims — сколько наград уже получено каждым реферером.
+ * vkId — PK, одна строка на пользователя.
+ */
 export const referralClaims = pgTable("referral_claims", {
-  vkId: text("vk_id").primaryKey(),
+  vkId: bigint("vk_id", { mode: "number" }).primaryKey(),
   claimed: integer("claimed").notNull().default(0),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export type Referral = typeof referrals.$inferSelect;
+export type ReferralClaim = typeof referralClaims.$inferSelect;
